@@ -3,10 +3,11 @@
 $config['useragent'] = 'Easy!Appointments';
 
 $config['protocol'] = 'smtp';
-$config['smtp_host'] = getenv('MAIL_SMTP_HOST') ?: 'smtp.sendgrid.net';
-$config['smtp_user'] = getenv('MAIL_SMTP_USER') ?: 'apikey';
-$config['smtp_pass'] = getenv('MAIL_SMTP_PASS') ?: '';
-$config['smtp_port'] = (int) (getenv('MAIL_SMTP_PORT') ?: 587);
+$config['smtp_host'] = 'smtp.sendgrid.net';
+$config['smtp_auth'] = TRUE;
+$config['smtp_user'] = 'apikey';
+$config['smtp_pass'] = getenv('MAIL_SMTP_PASS');
+$config['smtp_port'] = 587;
 $config['smtp_crypto'] = 'tls';
 $config['smtp_timeout'] = 30;
 
