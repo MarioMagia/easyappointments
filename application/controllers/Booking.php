@@ -594,6 +594,10 @@ class Booking extends EA_Controller
 
             $this->synchronization->sync_appointment_saved($appointment, $service, $provider, $customer, $settings);
 
+            log_message('error', 'EMAIL DEBUG: Starting notifications');
+
+            $start = microtime(true);
+
             $this->notifications->notify_appointment_saved(
                 $appointment,
                 $service,
@@ -601,6 +605,12 @@ class Booking extends EA_Controller
                 $customer,
                 $settings,
                 $manage_mode,
+            );
+
+            log_message(
+                'error',
+                'EMAIL DEBUG: Finished notifications in ' .
+                round(microtime(true) - $start, 2) . ' seconds'
             );
 
             $this->webhooks_client->trigger(WEBHOOK_APPOINTMENT_SAVE, $appointment);
