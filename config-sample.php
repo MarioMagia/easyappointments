@@ -42,6 +42,7 @@ class Config
     const DB_NAME = 'easyappointments';
     const DB_USERNAME = 'user';
     const DB_PASSWORD = 'password';
+    const DB_PORT = 24512;
 
     // ------------------------------------------------------------------------
     // GOOGLE CALENDAR SYNC (Optional - can also be configured via UI)
