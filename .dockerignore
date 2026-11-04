@@ -1,0 +1,13 @@
+
+.git
+.github
+node_modules
+vendor
+build
+config.php
+.env
+.env.*
+*.zip
+docker/mysql
+docker/baikal
+docker/openldap

@@ -1,57 +1,71 @@
-
 FROM php:8.2-apache
 
-# Install system dependencies
+# Install operating system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     zip \
     curl \
+    nodejs \
+    npm \
+    libcurl4-openssl-dev \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
-    libzip-dev \
-    libicu-dev \
-    && docker-php-ext-configure gd \
-       --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-       mysqli \
-       pdo \
-       pdo_mysql \
-       gd \
-       zip \
-       intl \
+    libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache rewrite
-RUN a2enmod rewrite headers
+# Install PHP extensions
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg \
+    && docker-php-ext-install \
+    curl \
+    gd \
+    mbstring \
+    mysqli \
+    xml
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Enable Apache modules
+RUN a2enmod rewrite headers
+
 WORKDIR /var/www/html
 
-# Copy application source
+# Copy Easy!Appointments source
 COPY . .
+
+# Build frontend assets
+RUN npm install \
+    && npm run build
 
 # Install PHP dependencies
 RUN composer install \
     --no-dev \
-    --optimize-autoloader \
-    --no-interaction
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
 
-# Set Apache document root
-ENV APACHE_DOCUMENT_ROOT=/var/www/html
+# Configure Apache overrides
+RUN printf '%s\n' \
+    '<Directory /var/www/html>' \
+    '    Options FollowSymLinks' \
+    '    AllowOverride All' \
+    '    Require all granted' \
+    '</Directory>' \
+    > /etc/apache2/conf-available/easyappointments.conf \
+    && a2enconf easyappointments
 
-# Allow .htaccess overrides
-RUN sed -ri \
-    's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/000-default.conf
+# Copy startup files
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/write-config.php /usr/local/bin/write-config.php
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage \
-    && chmod -R 775 /var/www/html/storage
+RUN chmod +x /usr/local/bin/entrypoint.sh \
+    && mkdir -p storage \
+    && chown -R www-data:www-data storage
 
-EXPOSE 80
+EXPOSE 10000
 
-CMD ["apache2-foreground"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
