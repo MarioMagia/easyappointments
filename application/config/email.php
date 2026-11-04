@@ -1,21 +1,19 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-// Add custom values by settings them to the $config array.
-// Example: $config['smtp_host'] = 'smtp.gmail.com';
-// @link https://codeigniter.com/user_guide/libraries/email.html
-
 $config['useragent'] = 'Easy!Appointments';
-$config['protocol'] = 'mail'; // or 'smtp'
-$config['mailtype'] = 'html'; // or 'text'
-// $config['smtp_debug'] = '0'; // or '1'
-// $config['smtp_auth'] = TRUE; //or FALSE for anonymous relay.
-// $config['smtp_host'] = '';
-// $config['smtp_user'] = '';
-// $config['smtp_pass'] = '';
-// $config['smtp_crypto'] = 'ssl'; // or 'tls'
-// $config['smtp_port'] = 25;
-// $config['from_name'] = '';
-// $config['from_address'] = '';
-// $config['reply_to'] = '';
+
+$config['protocol'] = 'smtp';
+$config['smtp_host'] = getenv('MAIL_SMTP_HOST') ?: 'smtp.sendgrid.net';
+$config['smtp_user'] = getenv('MAIL_SMTP_USER') ?: 'apikey';
+$config['smtp_pass'] = getenv('MAIL_SMTP_PASS') ?: '';
+$config['smtp_port'] = (int) (getenv('MAIL_SMTP_PORT') ?: 587);
+$config['smtp_crypto'] = 'tls';
+$config['smtp_timeout'] = 30;
+
+$config['mailtype'] = 'html';
+$config['charset'] = 'utf-8';
+$config['wordwrap'] = true;
+$config['validate'] = true;
+
 $config['crlf'] = "\r\n";
 $config['newline'] = "\r\n";
