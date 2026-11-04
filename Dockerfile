@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Install operating system dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -11,15 +11,17 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libxml2-dev \
+    libonig-dev \
+    libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
+# Configure and install PHP extensions
 RUN docker-php-ext-configure gd \
     --with-freetype \
     --with-jpeg \
-    && docker-php-ext-install \
+    && docker-php-ext-install -j$(nproc) \
     curl \
     gd \
     mbstring \
