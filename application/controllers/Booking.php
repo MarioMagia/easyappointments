@@ -594,7 +594,7 @@ class Booking extends EA_Controller
 
             $this->synchronization->sync_appointment_saved($appointment, $service, $provider, $customer, $settings);
 
-            /*$this->notifications->notify_appointment_saved(
+            $this->notifications->notify_appointment_saved(
                 $appointment,
                 $service,
                 $provider,
@@ -603,7 +603,7 @@ class Booking extends EA_Controller
                 $manage_mode,
             );
 
-            $this->webhooks_client->trigger(WEBHOOK_APPOINTMENT_SAVE, $appointment);*/
+            $this->webhooks_client->trigger(WEBHOOK_APPOINTMENT_SAVE, $appointment);
 
             $response = [
                 'appointment_id' => $appointment['id'],
