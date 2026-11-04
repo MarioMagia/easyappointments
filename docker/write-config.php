@@ -23,6 +23,7 @@ $settings = [
         FILTER_VALIDATE_BOOLEAN
     ),
     'DB_HOST' => requiredEnv('DB_HOST'),
+    'DB_PORT' => (int) (getenv('DB_PORT') ?: 3306),
     'DB_NAME' => requiredEnv('DB_NAME'),
     'DB_USERNAME' => requiredEnv('DB_USERNAME'),
     'DB_PASSWORD' => requiredEnv('DB_PASSWORD'),
