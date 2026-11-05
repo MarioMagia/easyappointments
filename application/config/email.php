@@ -9,7 +9,7 @@ $config['smtp_user'] = 'apikey';
 $config['smtp_pass'] = getenv('MAIL_SMTP_PASS');
 $config['smtp_port'] = 587;
 $config['smtp_crypto'] = 'tls';
-$config['smtp_timeout'] = 30;
+$config['smtp_timeout'] = 10;
 
 $config['mailtype'] = 'html';
 $config['charset'] = 'utf-8';
